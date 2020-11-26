@@ -1,0 +1,50 @@
+/*
+ * The main interface color for Icinga
+ * Used for:
+ *  - Header background
+ *  - Links and buttons
+ *  - Highlighting
+ */
+@icinga-blue: #0962A4;
+
+#login {
+  background-image: url('../img/company/base.png');
+
+  input[type=submit] {
+    background-color: @icinga-blue;
+  }
+}
+
+/*
+ * Logo display on login page
+ */
+#icinga-logo {
+  // TODO
+  background-image: url('../img/company/logo-blue.png');
+
+  &.invert {
+    // The logo shown on white background (DEFAULT)
+    background-image: url('../img/company/logo-blue.png');
+  }
+}
+
+/*
+ * The logo container in the main menu
+ * Adjusting the padding here to have a larger logo
+ */
+#header-logo-container {
+  padding: 0.5em;
+}
+
+/*
+ * Logo link shown in the main menu
+ *
+ * Background below is @icinga-blue
+ */
+#header-logo {
+  background-image: url('../img/company/logo-white.png');
+}
+
+#layout:not(.minimal-layout).sidebar-collapsed #header-logo {
+  background-image: url('../img/company/logo-white-compact.png');
+}
