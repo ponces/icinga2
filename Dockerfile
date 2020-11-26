@@ -77,9 +77,9 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 
 ARG GITREF_MODGRAPHITE=master
 ARG GITREF_MODAWS=master
-ARG GITREF_REACTBUNDLE=v0.7.0
+ARG GITREF_REACTBUNDLE=v0.8.0
 ARG GITREF_INCUBATOR=v0.5.0
-ARG GITREF_IPL=v0.3.0
+ARG GITREF_IPL=v0.5.0
 
 RUN mkdir -p /usr/local/share/icingaweb2/modules/ \
     # Icinga Director
@@ -97,9 +97,13 @@ RUN mkdir -p /usr/local/share/icingaweb2/modules/ \
     && wget -q --no-cookies "https://github.com/aws/aws-sdk-php/releases/download/2.8.30/aws.zip" \
     && unzip -d /usr/local/share/icingaweb2/modules/aws/library/vendor/aws aws.zip \
     && rm aws.zip \
+    # Icingaweb2 Cube
+    && mkdir -p /usr/local/share/icingaweb2/modules/cube \
+    && wget -q --no-cookies -O - "https://github.com/Icinga/icingaweb2-module-cube/archive/v1.1.1.tar.gz" \
+    | tar xz --strip-components=1 --directory=/usr/local/share/icingaweb2/modules/cube -f - \
     # Module Reactbundle
     && mkdir -p /usr/local/share/icingaweb2/modules/reactbundle/ \
-    && wget -q --no-cookies -O - "https://github.com/Icinga/icingaweb2-module-reactbundle/archive/v0.7.0.tar.gz" \
+    && wget -q --no-cookies -O - "https://github.com/Icinga/icingaweb2-module-reactbundle/archive/v0.8.0.tar.gz" \
     | tar xz --strip-components=1 --directory=/usr/local/share/icingaweb2/modules/reactbundle -f - \
     # Module Incubator
     && mkdir -p /usr/local/share/icingaweb2/modules/incubator/ \
@@ -107,7 +111,7 @@ RUN mkdir -p /usr/local/share/icingaweb2/modules/ \
     | tar xz --strip-components=1 --directory=/usr/local/share/icingaweb2/modules/incubator -f - \
     # Module Ipl
     && mkdir -p /usr/local/share/icingaweb2/modules/ipl/ \
-    && wget -q --no-cookies -O - "https://github.com/Icinga/icingaweb2-module-ipl/archive/v0.3.0.tar.gz" \
+    && wget -q --no-cookies -O - "https://github.com/Icinga/icingaweb2-module-ipl/archive/v0.5.0.tar.gz" \
     | tar xz --strip-components=1 --directory=/usr/local/share/icingaweb2/modules/ipl -f - \
     # Module x509
     && mkdir -p /usr/local/share/icingaweb2/modules/x509/ \
