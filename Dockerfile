@@ -4,7 +4,7 @@
 FROM debian:buster
 
 ENV APACHE2_HTTP=REDIRECT \
-    ICINGA2_FEATURE_GRAPHITE="true" \
+    ICINGA2_FEATURE_GRAPHITE="false" \
     ICINGA2_FEATURE_GRAPHITE_HOST="graphite" \
     ICINGA2_FEATURE_GRAPHITE_PORT="2003" \
     ICINGA2_FEATURE_GRAPHITE_URL="http://graphite" \
@@ -65,10 +65,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install "whisper==${ICINGA2_FEATURE_GRAPHITE_VERSION}" \
-                "carbon==${ICINGA2_FEATURE_GRAPHITE_VERSION}" \
-                "graphite-web==${ICINGA2_FEATURE_GRAPHITE_VERSION}"
-
 RUN export DEBIAN_FRONTEND=noninteractive \
     && curl -s https://packages.icinga.com/icinga.key \
     | apt-key add - \
@@ -89,6 +85,11 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     libmonitoring-plugin-perl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --upgrade setuptools \
+    && pip install --no-binary=:all: "https://github.com/graphite-project/whisper/tarball/${ICINGA2_FEATURE_GRAPHITE_VERSION}" \
+                                     "https://github.com/graphite-project/carbon/tarball/${ICINGA2_FEATURE_GRAPHITE_VERSION}" \
+                                     "https://github.com/graphite-project/graphite-web/tarball/${ICINGA2_FEATURE_GRAPHITE_VERSION}"
 
 ARG GITREF_MODGRAPHITE=master
 ARG GITREF_MODAWS=master
@@ -150,8 +151,7 @@ RUN true \
     && chmod 755 /var/log/icinga2 \
     && chown nagios:adm /var/log/icinga2 \
     && mkdir -p /var/run/graphite \
-    && mkdir -p /opt/graphite/storage/log/webapp \
-    && mkdir -p /opt/graphite/storage/whisper \
+    && cp /opt/graphite/conf/carbon.conf.example /opt/graphite/conf/carbon.conf \
     && cp /opt/graphite/conf/graphite.wsgi.example /opt/graphite/webapp/graphite/wsgi.py \
     && rm -rf \
     /var/lib/mysql/* \
