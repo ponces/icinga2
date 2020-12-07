@@ -5,15 +5,6 @@
 import os
 import dj_database_url
 
-def Bool(value):
-    if not value:
-        return False
-    value = value.lower()
-    if value in ('y', 'yes', 't', 'true', '1'):
-        return True
-    if value in ('n', 'no', 'f', 'false', '0'):
-        return False
-
 #####################################
 # General Configuration #
 #####################################
@@ -22,7 +13,7 @@ def Bool(value):
 # install. This key is used for salting of hashes used in auth tokens,
 # CRSF middleware, cookie storage, etc. This should be set identically among
 # instances if used behind a load balancer.
-SECRET_KEY = os.environ.get('GRAPHITE_WEB_SECRET_KEY', 'UNSAFE_DEFAULT')
+#SECRET_KEY = 'UNSAFE_DEFAULT'
 
 # In Django 1.5+ set this to the list of hosts your graphite instances is
 # accessible as. See:
@@ -45,8 +36,8 @@ TIME_ZONE = os.environ.get('TIME_ZONE', 'UTC')
 # https://docs.djangoproject.com/en/1.11/topics/logging/
 #LOG_ROTATION = True
 #LOG_ROTATION_COUNT = 1
-LOG_RENDERING_PERFORMANCE = Bool(os.environ.get('LOG_RENDERING_PERFORMANCE', 'true'))
-LOG_CACHE_PERFORMANCE = Bool(os.environ.get('LOG_CACHE_PERFORMANCE', 'true'))
+#LOG_RENDERING_PERFORMANCE = True
+#LOG_CACHE_PERFORMANCE = True
 
 # Filenames for log output, set to '-' to log to stderr
 #LOG_FILE_INFO = 'info.log'
@@ -159,17 +150,16 @@ DEFAULT_XFILES_FACTOR = 0
 #####################################
 #
 # This is used for emailing rendered graphs. The default backend is SMTP.
-email = os.environ.get('GRAPHITE_WEB_EMAIL_HOST')
-if email:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = email
-    EMAIL_PORT = os.environ.get('GRAPHITE_WEB_EMAIL_PORT', 25)
-    EMAIL_HOST_USER = os.environ.get('GRAPHITE_WEB_EMAIL_USER', '')
-    EMAIL_HOST_PASSWORD = os.environ.get('GRAPHITE_WEB_EMAIL_PASSWORD', '')
-    EMAIL_USE_TLS = Bool(os.environ.get('GRAPHITE_WEB_EMAIL_USE_TLS'))
-else:
-    # To drop emails on the floor, enable the Dummy backend instead.
-    EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#
+# To drop emails on the floor, enable the Dummy backend instead.
+#EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
+#EMAIL_HOST = 'localhost'
+#EMAIL_PORT = 25
+#EMAIL_HOST_USER = ''
+#EMAIL_HOST_PASSWORD = ''
+#EMAIL_USE_TLS = False
 
 
 #####################################

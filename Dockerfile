@@ -153,6 +153,7 @@ RUN true \
     && mkdir -p /var/run/graphite \
     && cp /opt/graphite/conf/carbon.conf.example /opt/graphite/conf/carbon.conf \
     && cp /opt/graphite/conf/graphite.wsgi.example /opt/graphite/webapp/graphite/wsgi.py \
+    && sed -i "s/#SECRET_KEY.*/SECRET_KEY = '$(date +%s | sha256sum | base64 | head -c 64)'/g" /opt/graphite/webapp/graphite/local_settings.py \
     && rm -rf \
     /var/lib/mysql/* \
     && chmod u+s,g+s \
