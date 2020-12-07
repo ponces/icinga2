@@ -4,30 +4,37 @@
 FROM debian:buster
 
 ENV APACHE2_HTTP=REDIRECT \
-    ICINGA2_FEATURE_GRAPHITE=false \
-    ICINGA2_FEATURE_GRAPHITE_HOST=graphite \
-    ICINGA2_FEATURE_GRAPHITE_PORT=2003 \
-    ICINGA2_FEATURE_GRAPHITE_URL=http://graphite \
+    ICINGA2_FEATURE_GRAPHITE="true" \
+    ICINGA2_FEATURE_GRAPHITE_HOST="graphite" \
+    ICINGA2_FEATURE_GRAPHITE_PORT="2003" \
+    ICINGA2_FEATURE_GRAPHITE_URL="http://graphite" \
     ICINGA2_FEATURE_GRAPHITE_SEND_THRESHOLDS="true" \
     ICINGA2_FEATURE_GRAPHITE_SEND_METADATA="false" \
+    ICINGA2_FEATURE_GRAPHITE_VERSION="1.1.7" \
     ICINGA2_USER_FULLNAME="Icinga2" \
     ICINGA2_FEATURE_DIRECTOR="true" \
     ICINGA2_FEATURE_DIRECTOR_KICKSTART="true" \
     ICINGA2_FEATURE_DIRECTOR_USER="icinga2-director" \
-    MYSQL_ROOT_USER=root
+    MYSQL_ROOT_USER="root" \
+    PYTHONPATH="/opt/graphite/lib:/opt/graphite/webapp" \
+    DJANGO_SETTINGS_MODULE="graphite.settings" \
+    PATH="$PATH:/opt/graphite/bin"
 
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get update \
     && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \
     apache2 \
+    build-essential \
     ca-certificates \
     curl \
     dnsutils \
     file \
     gnupg \
+    libcairo2-dev \
     libdbd-mysql-perl \
     libdigest-hmac-perl \
+    libffi-dev \
     libnet-snmp-perl \
     locales \
     lsb-release \
@@ -44,6 +51,10 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     php-gmp \
     procps \
     pwgen \
+    python-dev \
+    python-pip \
+    python-setuptools \
+    python-wheel \
     snmp \
     msmtp \
     sudo \
@@ -53,6 +64,10 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y --purge remove exim4 exim4-base exim4-config exim4-daemon-light \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+RUN pip install "whisper==${ICINGA2_FEATURE_GRAPHITE_VERSION}" \
+                "carbon==${ICINGA2_FEATURE_GRAPHITE_VERSION}" \
+                "graphite-web==${ICINGA2_FEATURE_GRAPHITE_VERSION}"
 
 RUN export DEBIAN_FRONTEND=noninteractive \
     && curl -s https://packages.icinga.com/icinga.key \
@@ -134,6 +149,10 @@ RUN true \
     && mkdir -p /var/log/icinga2 \
     && chmod 755 /var/log/icinga2 \
     && chown nagios:adm /var/log/icinga2 \
+    && mkdir -p /var/run/graphite \
+    && mkdir -p /opt/graphite/storage/log/webapp \
+    && mkdir -p /opt/graphite/storage/whisper \
+    && cp /opt/graphite/conf/graphite.wsgi.example /opt/graphite/webapp/graphite/wsgi.py \
     && rm -rf \
     /var/lib/mysql/* \
     && chmod u+s,g+s \
@@ -141,7 +160,8 @@ RUN true \
     /bin/ping6 \
     /usr/lib/nagios/plugins/check_icmp
 
-EXPOSE 80 443 5665
+EXPOSE 80 443 2003 5665
+VOLUME /opt/graphite/storage
 
 # Initialize and run Supervisor
 ENTRYPOINT ["/opt/run"]
