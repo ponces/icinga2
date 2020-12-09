@@ -55,10 +55,11 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && rm -rf /var/lib/apt/lists/*
 
 RUN export DEBIAN_FRONTEND=noninteractive \
-    && curl -s https://packages.icinga.com/icinga.key \
-    | apt-key add - \
+    && curl -s https://packages.icinga.com/icinga.key | apt-key add - \
+    && curl -s https://repos.influxdata.com/influxdb.key | apt-key add - \
     && echo "deb http://packages.icinga.org/debian icinga-$(lsb_release -cs) main" > /etc/apt/sources.list.d/icinga2.list \
     && echo "deb http://deb.debian.org/debian $(lsb_release -cs)-backports main" > /etc/apt/sources.list.d/$(lsb_release -cs)-backports.list \
+    && echo "deb https://repos.influxdata.com/debian buster stable" > /etc/apt/sources.list.d/influxdb.list \
     && apt-get update \
     && apt-get install -y --install-recommends \
     icinga2 \
@@ -67,6 +68,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     icingaweb2 \
     icingaweb2-module-doc \
     icingaweb2-module-monitoring \
+    influxdb \
     monitoring-plugins \
     nagios-nrpe-plugin \
     nagios-plugins-contrib \
