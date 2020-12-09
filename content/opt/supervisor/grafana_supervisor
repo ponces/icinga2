@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. /opt/helpers
+
+service grafana-server start
+
+# Allow any signal which would kill a process to stop server
+trap "service grafana-server stop" HUP INT QUIT ABRT ALRM TERM TSTP
+
+while pgrep -u grafana grafana-server > /dev/null; do sleep 5; done

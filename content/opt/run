@@ -44,23 +44,6 @@ locale-gen &
 
 run-parts --lsbsysinit --exit-on-error -- /opt/setup
 
-cat <<-END
-
-===================================================================
-MySQL user 'root' has no password but only allows local connections
-
-$(
-if evaluate_boolean "${ICINGA2_FEATURE_GRAPHITE}"; then
-	echo "Graphite writer enabled and sending data to carbon agent at: ${ICINGA2_FEATURE_GRAPHITE_HOST}:${ICINGA2_FEATURE_GRAPHITE_PORT}"
-fi
-)
-
-Icinga Web 2 (/icingaweb2) default credentials: ${ICINGAWEB2_ADMIN_USER}:${ISSET_ICINGAWEB2_ADMIN_PASS:-$ICINGAWEB2_ADMIN_PASS}
-===================================================================
-
-Starting Supervisor.
-END
-
 icinga2 daemon --validate
 
 /usr/bin/supervisord -c /etc/supervisor/supervisord.conf -n &

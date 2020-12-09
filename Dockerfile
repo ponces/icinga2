@@ -4,12 +4,6 @@
 FROM debian:buster
 
 ENV APACHE2_HTTP=REDIRECT \
-    ICINGA2_FEATURE_GRAPHITE="false" \
-    ICINGA2_FEATURE_GRAPHITE_HOST="graphite" \
-    ICINGA2_FEATURE_GRAPHITE_PORT="2003" \
-    ICINGA2_FEATURE_GRAPHITE_URL="http://graphite" \
-    ICINGA2_FEATURE_GRAPHITE_SEND_THRESHOLDS="true" \
-    ICINGA2_FEATURE_GRAPHITE_SEND_METADATA="false" \
     ICINGA2_USER_FULLNAME="Icinga2" \
     ICINGA2_FEATURE_DIRECTOR="true" \
     ICINGA2_FEATURE_DIRECTOR_KICKSTART="true" \
@@ -57,11 +51,14 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN export DEBIAN_FRONTEND=noninteractive \
     && curl -s https://packages.icinga.com/icinga.key | apt-key add - \
     && curl -s https://repos.influxdata.com/influxdb.key | apt-key add - \
+    && curl -s https://packages.grafana.com/gpg.key | apt-key add - \
     && echo "deb http://packages.icinga.org/debian icinga-$(lsb_release -cs) main" > /etc/apt/sources.list.d/icinga2.list \
     && echo "deb http://deb.debian.org/debian $(lsb_release -cs)-backports main" > /etc/apt/sources.list.d/$(lsb_release -cs)-backports.list \
     && echo "deb https://repos.influxdata.com/debian buster stable" > /etc/apt/sources.list.d/influxdb.list \
+    && echo "deb https://packages.grafana.com/oss/deb stable main" > /etc/apt/sources.list.d/grafana.list \
     && apt-get update \
     && apt-get install -y --install-recommends \
+    grafana \
     icinga2 \
     icinga2-ido-mysql \
     icingacli \
@@ -77,21 +74,15 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ARG GITREF_MODGRAPHITE=master
-ARG GITREF_MODAWS=master
-ARG GITREF_REACTBUNDLE=v0.8.0
-ARG GITREF_INCUBATOR=v0.5.0
-ARG GITREF_IPL=v0.5.0
-
 RUN mkdir -p /usr/local/share/icingaweb2/modules/ \
     # Icinga Director
     && mkdir -p /usr/local/share/icingaweb2/modules/director/ \
     && wget -q --no-cookies -O - "https://github.com/Icinga/icingaweb2-module-director/archive/v1.7.2.tar.gz" \
     | tar xz --strip-components=1 --directory=/usr/local/share/icingaweb2/modules/director --exclude=.gitignore -f - \
-    # Icingaweb2 Graphite
-    && mkdir -p /usr/local/share/icingaweb2/modules/graphite \
-    && wget -q --no-cookies -O - "https://github.com/Icinga/icingaweb2-module-graphite/archive/v1.1.0.tar.gz" \
-    | tar xz --strip-components=1 --directory=/usr/local/share/icingaweb2/modules/graphite -f - \
+    # Icingaweb2 Grafana
+    && mkdir -p /usr/local/share/icingaweb2/modules/grafana \
+    && wget -q --no-cookies -O - "https://github.com/Mikesch-mp/icingaweb2-module-grafana/archive/v1.3.6.tar.gz" \
+    | tar xz --strip-components=1 --directory=/usr/local/share/icingaweb2/modules/grafana -f - \
     # Icingaweb2 AWS
     && mkdir -p /usr/local/share/icingaweb2/modules/aws \
     && wget -q --no-cookies -O - "https://github.com/Icinga/icingaweb2-module-aws/archive/v1.0.0.tar.gz" \
@@ -143,7 +134,7 @@ RUN true \
     /bin/ping6 \
     /usr/lib/nagios/plugins/check_icmp
 
-EXPOSE 80 443 5665
+EXPOSE 80 443 3000 5665
 
 # Initialize and run Supervisor
 ENTRYPOINT ["/opt/run"]

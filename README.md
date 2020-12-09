@@ -16,7 +16,6 @@ This build is automated by push for the git-repo. Just crawl it via:
    - icingacli
    - icingaweb2
    - icingaweb2-director module
-   - icingaweb2-graphite module
    - icingaweb2-module-aws
    - ssmtp
    - MySQL
@@ -55,21 +54,6 @@ If you want to save your php-sessions over multiple boots, mount `/var/lib/php/s
 example:
 ```
 docker run [...] -v $PWD/icingaweb2-sessions:/var/lib/php/sessions/ jordan/icinga2
-```
-
-## Graphite
-
-The graphite writer can be enabled by setting the `ICINGA2_FEATURE_GRAPHITE` variable to `true` or `1` and also supplying values for `ICINGA2_FEATURE_GRAPHITE_HOST` and `ICINGA2_FEATURE_GRAPHITE_PORT`. This container does not have graphite and the carbon daemons installed so `ICINGA2_FEATURE_GRAPHITE_HOST` should not be set to `localhost`.
-
-Example:
-
-```
-docker run -t \
-  --link graphite:graphite \
-  -e ICINGA2_FEATURE_GRAPHITE=true \
-  -e ICINGA2_FEATURE_GRAPHITE_HOST=graphite \
-  -e ICINGA2_FEATURE_GRAPHITE_PORT=2003 \
-  jordan/icinga2:latest
 ```
 
 ## Icinga Director
@@ -200,12 +184,6 @@ The variables default their respective `DEFAULT` service variable.
 
 | Environmental Variable | Default Value | Description |
 | ---------------------- | ------------- | ----------- |
-| `ICINGA2_FEATURE_GRAPHITE` | false | Set to true or 1 to enable graphite writer |
-| `ICINGA2_FEATURE_GRAPHITE_HOST` | graphite | hostname or IP address where Carbon/Graphite daemon is running |
-| `ICINGA2_FEATURE_GRAPHITE_PORT` | 2003 | Carbon port for graphite |
-| `ICINGA2_FEATURE_GRAPHITE_URL` | http://${ICINGA2_FEATURE_GRAPHITE_HOST} | Web-URL for Graphite |
-| `ICINGA2_FEATURE_GRAPHITE_SEND_THRESHOLD` | true | If you want to send `min`, `max`, `warn` and `crit` values for perf data |
-| `ICINGA2_FEATURE_GRAPHITE_SEND_METADATA` | false | If you want to send `state`, `latency` and `execution_time` values for the checks |
 | `ICINGA2_FEATURE_DIRECTOR` | true | Set to false or 0 to disable icingaweb2 director |
 | `ICINGA2_FEATURE_DIRECTOR_USER` | icinga2-director | Icinga2director Login User |
 | `ICINGA2_FEATURE_DIRECTOR_PASS` | *random generated each start* | Icinga2director Login Password<br>*Set this to prevent continues [admin] modify apiuser "icinga2-director" activities* |

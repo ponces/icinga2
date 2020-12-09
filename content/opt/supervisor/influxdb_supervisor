@@ -4,6 +4,13 @@
 
 service influxdb start
 
+result=$(influx -execute 'SHOW DATABASES' -format json)
+if ! echo "$result" | grep -q "\"icinga2\""
+then
+    influx -execute "CREATE DATABASE icinga2"
+    influx -execute "CREATE USER icinga2 WITH PASSWORD 'icinga' WITH ALL PRIVILEGES" -database="icinga2"
+fi
+
 # Allow any signal which would kill a process to stop server
 trap "service influxdb stop" HUP INT QUIT ABRT ALRM TERM TSTP
 
