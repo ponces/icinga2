@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. /opt/helpers
+
+service influxdb start
+
+# Allow any signal which would kill a process to stop server
+trap "service influxdb stop" HUP INT QUIT ABRT ALRM TERM TSTP
+
+while pgrep -u root -f influxdb > /dev/null; do sleep 5; done
