@@ -63,8 +63,6 @@ END
 
 icinga2 daemon --validate
 
-python /opt/graphite/webapp/graphite/manage.py syncdb --noinput
-
 /usr/bin/supervisord -c /etc/supervisor/supervisord.conf -n &
 trap "supervisorctl shutdown && wait" SIGTERM
 wait

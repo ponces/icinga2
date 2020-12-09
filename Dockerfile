@@ -10,31 +10,24 @@ ENV APACHE2_HTTP=REDIRECT \
     ICINGA2_FEATURE_GRAPHITE_URL="http://graphite" \
     ICINGA2_FEATURE_GRAPHITE_SEND_THRESHOLDS="true" \
     ICINGA2_FEATURE_GRAPHITE_SEND_METADATA="false" \
-    ICINGA2_FEATURE_GRAPHITE_VERSION="1.1.7" \
     ICINGA2_USER_FULLNAME="Icinga2" \
     ICINGA2_FEATURE_DIRECTOR="true" \
     ICINGA2_FEATURE_DIRECTOR_KICKSTART="true" \
     ICINGA2_FEATURE_DIRECTOR_USER="icinga2-director" \
-    MYSQL_ROOT_USER="root" \
-    PYTHONPATH="/opt/graphite/lib:/opt/graphite/webapp" \
-    DJANGO_SETTINGS_MODULE="graphite.settings" \
-    PATH="$PATH:/opt/graphite/bin"
+    MYSQL_ROOT_USER="root"
 
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get update \
     && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \
     apache2 \
-    build-essential \
     ca-certificates \
     curl \
     dnsutils \
     file \
     gnupg \
-    libcairo2-dev \
     libdbd-mysql-perl \
     libdigest-hmac-perl \
-    libffi-dev \
     libnet-snmp-perl \
     locales \
     lsb-release \
@@ -51,10 +44,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     php-gmp \
     procps \
     pwgen \
-    python-dev \
-    python-pip \
-    python-setuptools \
-    python-wheel \
     snmp \
     msmtp \
     sudo \
@@ -85,11 +74,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     libmonitoring-plugin-perl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-RUN pip install --upgrade setuptools \
-    && pip install --no-binary=:all: "https://github.com/graphite-project/whisper/tarball/${ICINGA2_FEATURE_GRAPHITE_VERSION}" \
-                                     "https://github.com/graphite-project/carbon/tarball/${ICINGA2_FEATURE_GRAPHITE_VERSION}" \
-                                     "https://github.com/graphite-project/graphite-web/tarball/${ICINGA2_FEATURE_GRAPHITE_VERSION}"
 
 ARG GITREF_MODGRAPHITE=master
 ARG GITREF_MODAWS=master
@@ -150,10 +134,6 @@ RUN true \
     && mkdir -p /var/log/icinga2 \
     && chmod 755 /var/log/icinga2 \
     && chown nagios:adm /var/log/icinga2 \
-    && mkdir -p /var/run/graphite \
-    && cp /opt/graphite/conf/carbon.conf.example /opt/graphite/conf/carbon.conf \
-    && cp /opt/graphite/conf/graphite.wsgi.example /opt/graphite/webapp/graphite/wsgi.py \
-    && sed -i "s/#SECRET_KEY.*/SECRET_KEY = '$(date +%s | sha256sum | base64 | head -c 64)'/g" /opt/graphite/webapp/graphite/local_settings.py \
     && rm -rf \
     /var/lib/mysql/* \
     && chmod u+s,g+s \
@@ -161,8 +141,7 @@ RUN true \
     /bin/ping6 \
     /usr/lib/nagios/plugins/check_icmp
 
-EXPOSE 80 443 2003 5665
-VOLUME /opt/graphite/storage
+EXPOSE 80 443 5665
 
 # Initialize and run Supervisor
 ENTRYPOINT ["/opt/run"]
