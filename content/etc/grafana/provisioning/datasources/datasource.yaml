@@ -1,0 +1,17 @@
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: server
+    url: http://localhost:8086
+    database: icinga2
+    user: icinga2
+    basicAuth: true
+    basicAuthUser: icinga2
+    isDefault: true
+    secureJsonData:
+      password: icinga
+      basicAuthPassword: icinga
+    version: 1
+    editable: false

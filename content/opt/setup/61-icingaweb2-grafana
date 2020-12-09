@@ -4,4 +4,4 @@
 
 icingacli module enable grafana
 
-ini_set /etc/grafana/grafana.ini auth.anonymous enabled true
+#ini_set /etc/grafana/grafana.ini auth.anonymous enabled true
