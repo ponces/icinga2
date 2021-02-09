@@ -86,3 +86,61 @@ object IdoMysqlConnection "ido-mysql" {
   database = "${ICINGA2_IDO_MYSQL_DATA}"
 }
 END
+
+cat >> /etc/icinga2/conf.d/templates.conf <<-END
+
+template Host "generic-windows-server" {
+	import "generic-host"
+    check_command = "hostalive"
+    vars.os = "Windows"
+    vars.server = true
+}
+
+template Service "generic_disk_smb" {
+	import "generic-service"
+	check_command = "disk_smb"
+	vars.disk_smb_hostname = "cmffs.cmf.criticalmanufacturing.com"
+	vars.disk_smb_workgroup = "CMF"
+	vars.disk_smb_username = "${CMF_SERVICES_USER}"
+	vars.disk_smb_password = "${CMF_SERVICES_PASS}"
+	vars.disk_smb_wused = "80%"
+	vars.disk_smb_cused = "90%"
+}
+END
+
+cp /etc/icinga2/conf.d/hosts.conf /etc/icinga2/conf.d/hosts.conf.orig
+cat > /etc/icinga2/conf.d/hosts.conf <<-END
+object Host "cmffs" {
+    import "generic-windows-server"
+    display_name = "cmffs"
+    address = "10.24.14.17"
+	address6 = "2001:8a0:e7f9:c500::1"
+}
+END
+
+cp /etc/icinga2/conf.d/services.conf /etc/icinga2/conf.d/services.conf.orig
+cat > /etc/icinga2/conf.d/services.conf <<-END
+apply Service "ping4" {
+  import "generic-service"
+  check_command = "ping4"
+  assign where host.address
+}
+
+apply Service "ping6" {
+  import "generic-service"
+  check_command = "ping6"
+  assign where host.address6
+}
+
+apply Service "disk \\\Services-Backup" {
+	import "generic_disk_smb"
+	vars.disk_smb_share = "Services-Backup"
+    assign where host.name == "cmffs"
+}
+
+apply Service "disk \\\Services-NoBackup" {
+	import "generic_disk_smb"
+	vars.disk_smb_share = "Services-NoBackup"
+    assign where host.name == "cmffs"
+}
+END

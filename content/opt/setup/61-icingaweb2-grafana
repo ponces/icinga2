@@ -4,4 +4,10 @@
 
 icingacli module enable grafana
 
-#ini_set /etc/grafana/grafana.ini auth.anonymous enabled true
+grafana-cli plugins install grafana-image-renderer
+
+ini_set /etc/grafana/grafana.ini auth.anonymous enabled true
+ini_set /etc/grafana/grafana.ini security admin_user "${GRAFANA_ADMIN_USER}"
+ini_set /etc/grafana/grafana.ini security admin_password "${GRAFANA_ADMIN_PASS}"
+ini_set /etc/grafana/grafana.ini security allow_embedding true
+ini_set /etc/icingaweb2/modules/grafana/config.ini grafana accessmode "iframe"
