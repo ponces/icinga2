@@ -14,6 +14,7 @@ if [ ! -e '/var/run/icinga2' ]; then
   ln -fs /usr/local/share/icingaweb2/modules/incubator /etc/icingaweb2/enabledModules/
   ln -fs /usr/local/share/icingaweb2/modules/reactbundle /etc/icingaweb2/enabledModules/
   ln -fs /etc/icingaweb2/userModules/company /etc/icingaweb2/enabledModules/
+  ln -fs /etc/icingaweb2/userModules/company-dark /etc/icingaweb2/enabledModules/
   ln -fs /usr/bin/msmtp /usr/sbin/sendmail
 fi
 

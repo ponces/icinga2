@@ -1,0 +1,323 @@
+@body-bg-color: #141414;
+
+@icinga-blue: #0962A4;
+
+@black: #ADADAD;
+
+@gray: #7F7F7F;
+@gray-light: #2F2F2F;
+@gray-lighter: #0C0C0C;
+@gray-lightest: #1F1F1F;
+
+@tr-active-color: #1C1C1C;
+@tr-hover-color: #0962A4;
+
+@color-notification-error: #a92626;
+@color-notification-success: #0962A4;
+
+input, select, textarea {
+  background-color: @gray-lighter !important;
+}
+
+input[type="submit"] {
+  .button(@gray, @icinga-blue);
+}
+
+tr[href]:hover {
+  color: @gray-lighter !important;
+
+  .overview-plugin-output {
+    color: @gray-light;
+  }
+}
+
+#menu {
+  input.search {
+    color: @icinga-blue;
+    background-image: url('../img/theme-dark/search_gray.png');
+ 
+    &:focus {
+      color: @icinga-blue;
+      background-color: @body-bg-color;
+      background-image: url('../img/theme-dark/search_blue.png') !important;
+    }
+  }
+}
+
+#header-logo {
+  background-image: url('../img/company/logo-white.png');
+}
+
+#header-logo-container {
+  padding: 0.5em;
+}
+
+#layout:not(.minimal-layout).sidebar-collapsed {
+  background-image: url('../img/company/logo-white-compact.png');
+  #search:focus {
+    color: @icinga-blue; 
+  }
+}
+
+#menu {
+  background-color: @gray-lighter;
+
+  .nav-level-1 > .nav-item {
+    color: @black;
+
+    &.active, &:hover {
+      color: @icinga-blue;
+    }
+  }
+  .nav-level-2 > .nav-item {
+    color: @black;
+  }
+  ul:not(.nav-level-2) > .selected > a:after {
+    background-color: @body-bg-color;
+  }
+}
+
+#main div.filter form.editor ul.tree li.active {
+  background-color: @gray-lighter;
+}
+
+#login {
+  background-color: @body-bg-color;
+  background-image: url('../img/company/base.png');
+
+  #icinga-logo {
+    background-image: url('../img/company/logo-blue.png');
+  }
+
+  .login-form {
+    background-color: @icinga-blue;
+  }
+
+  .control-label {
+    color: @body-bg-color;
+  }
+
+  input[type=password],
+  input[type=text] {
+    color: @icinga-blue;
+  }
+
+  input[type=submit] {
+    .button(@icinga-blue, @gray);
+  }
+}
+
+#login-footer {
+  color: @body-bg-color;
+}
+
+#social > li i{
+  color: @body-bg-color;
+  text-shadow: 0 0 0.5em @icinga-blue;
+}
+
+#layout.minimal-layout {
+  #social > li a i {
+    color: @body-bg-color;
+  }
+}
+
+input[type="submit"] {
+  .button(@gray, @icinga-blue);
+}
+
+.dashboard-link {
+  &:hover {
+    color: @gray-lighter !important;
+
+    .link-description {
+      color: @gray-lighter;
+    }
+  }
+}
+
+
+/* Scrollbars */
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+
+::-webkit-scrollbar-corner {
+  background: @body-bg-color;
+}
+
+
+/* Tactical Overview */
+
+.icinga-module.module-monitoring {
+  .boxview div.box.contents {
+    background-color: @body-bg-color;
+  }
+
+  div.box.ok_hosts.state_up,
+  div.box.problem_hosts.state_down {
+    border: none;
+  }
+
+  .plugin-output {
+    background: @gray-lighter;
+    border-left: 5px solid @icinga-blue;
+  }
+}
+
+
+/* Icingaweb2 Module Director */
+
+.icinga-module.module-director {
+  dd.active ul.extensible-set input[type=text],
+  ul.extensible-set.sortable input[type=text] {
+    border: none;
+  }
+
+  div.filter form.editor > ul.tree ul li.active {
+    background-color: @tr-hover-color !important;
+  }
+
+  ul.main-actions li a:hover {
+    background-color: @tr-hover-color;
+    color: inherit;
+  }
+
+  form input[type=submit] {
+    .button(@gray, @icinga-blue);
+  }
+
+  input[type=text].search,
+  input[type=password].search,
+  textarea.search,
+  select.search {
+    background-color: transparent !important;
+
+    &:focus {
+       color: @icinga-blue;
+    }
+  }
+
+  ul.director-suggestions {
+    background-color: @gray-lighter;
+
+    li:hover {
+      background-color: @tr-hover-color !important;
+      color: @tr-active-color;
+    }
+  }
+  
+  @color-diff-ins: #0962A4;
+  @color-diff-ins-text: #0962A4;
+  @color-diff-del: #a92626;
+  @color-diff-del-text: #fdb1b1;
+  @color-diff-changed-old: #d26f6f;
+  @color-diff-changed-old-text: #fdb1b1;
+  @color-diff-changed-new: #0962A4;
+  @color-diff-changed-new-text: #0962A4;
+  
+  .DifferencesSideBySide {
+    .ChangeInsert {
+      td.Left {
+        background: @gray-lighter;
+      }
+      td.Right {
+        background: @color-diff-ins;
+        color: @color-diff-ins-text;
+      }
+    }
+
+    .ChangeDelete {
+      td.Left {
+        background: @color-diff-del;
+        color: @color-diff-del-text;
+      }
+      td.Right {
+        background: @gray-lighter;
+      }
+    }
+
+    .ChangeReplace {
+      td.Left {
+        background: @color-diff-changed-old;
+        color: @color-diff-changed-old-text;
+        del {
+          background: @color-diff-del;
+        }
+      }
+      td.Right {
+        background: @color-diff-changed-new;
+        color: @color-diff-changed-new-text;
+        ins {
+          background: @color-diff-ins;
+          color: @color-diff-ins-text;
+        }
+      }
+    }
+  }
+  .DifferencesInline .ChangeReplace .Left,
+  .DifferencesInline .ChangeDelete .Left {
+      background: @color-diff-changed-old;
+      color: @color-diff-changed-old-text;
+  }
+  .DifferencesInline .ChangeReplace .Right,
+  .DifferencesInline .ChangeInsert .Right {
+      background: @color-diff-changed-new;
+      color: @color-diff-changed-new-text;
+  }
+  .DifferencesInline .ChangeReplace ins {
+      background: @color-diff-ins;
+      color: @color-diff-ins-text;
+  }
+  .DifferencesInline .ChangeReplace del {
+      background: @color-diff-del;
+      color: @color-diff-del-text;
+  }
+}
+
+
+/* Icingaweb2 Module Businessprocess */
+
+.icinga-module.module-businessprocess .breadcrumb li a:before {
+  border-left-color: @body-bg-color;
+}
+
+
+/* Icingaweb2 Module Grafana */
+
+.icinga-module.module-grafana {
+  .grafana-menu-navigation {
+    background: @body-bg-color;
+
+    li {
+      color: @body-bg-color;
+    }
+
+    li:nth-child(even) { 
+      background: @black; 
+      color: @body-bg-color;
+    }
+
+    li:nth-child(odd) {
+      background: @black;
+      color: @body-bg-color;
+    }
+  }
+
+  .grafana-menu-navigation:hover a.main {
+    background-color: @tr-hover-color;
+  }
+}
+
+
