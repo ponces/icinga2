@@ -304,106 +304,6 @@
               "value": "pl"
             }
           ]
-        },
-        {
-          "alias": "CRITICAL",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "hide": true,
-          "measurement": "ping4",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "crit"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "hostname",
-              "operator": "=~",
-              "value": "/^cmffs/"
-            },
-            {
-              "condition": "AND",
-              "key": "metric",
-              "operator": "=",
-              "value": "rta"
-            }
-          ]
-        },
-        {
-          "alias": "WARNING",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "hide": true,
-          "measurement": "ping4",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "warn"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "hostname",
-              "operator": "=~",
-              "value": "/^cmffs/"
-            },
-            {
-              "condition": "AND",
-              "key": "metric",
-              "operator": "=",
-              "value": "rta"
-            }
-          ]
         }
       ],
       "thresholds": [],
@@ -614,106 +514,6 @@
               "value": "pl"
             }
           ]
-        },
-        {
-          "alias": "CRITICAL",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "hide": true,
-          "measurement": "ping6",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "crit"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "hostname",
-              "operator": "=~",
-              "value": "/^cmffs/"
-            },
-            {
-              "condition": "AND",
-              "key": "metric",
-              "operator": "=",
-              "value": "rta"
-            }
-          ]
-        },
-        {
-          "alias": "WARNING",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "hide": true,
-          "measurement": "ping6",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "warn"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "hostname",
-              "operator": "=~",
-              "value": "/^cmffs/"
-            },
-            {
-              "condition": "AND",
-              "key": "metric",
-              "operator": "=",
-              "value": "rta"
-            }
-          ]
         }
       ],
       "thresholds": [],
@@ -823,7 +623,6 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "WARNING",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -842,64 +641,10 @@
           "hide": false,
           "measurement": "disk_smb",
           "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"disk_smb\" WHERE \"hostname\" =~ /^cmffs/ AND \"service\" = \"disk \\Services-Backup\" AND $timeFilter GROUP BY time($interval) fill(null)",
-          "rawQuery": false,
+          "query": "SELECT ((max-value)/1024/1024/1024) FROM \"disk_smb\" WHERE \"hostname\" =~ /^cmffs/ AND \"service\" =~ /Services-Backup$/ AND $timeFilter",
+          "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "warn"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "alias": "CRITICAL",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "hide": false,
-          "measurement": "disk_smb",
-          "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"disk_smb\" WHERE \"hostname\" =~ /^cmffs/ AND \"service\" = \"disk \\Services-Backup\" AND $timeFilter GROUP BY time($interval) fill(null)",
-          "rawQuery": false,
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "crit"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
           "tags": []
         }
       ],
@@ -923,11 +668,11 @@
       },
       "yaxes": [
         {
-          "format": "decbytes",
+          "format": "gigabytes",
           "label": "",
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": 0,
           "show": true
         },
         {
@@ -1010,7 +755,6 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "WARNING",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -1029,64 +773,10 @@
           "hide": false,
           "measurement": "disk_smb",
           "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"disk_smb\" WHERE \"hostname\" =~ /^cmffs/ AND \"service\" = \"disk \\Services-NoBackup\" AND \"service\" = \"disk \\Services-NoBackup\" AND $timeFilter GROUP BY time($interval) fill(null)",
-          "rawQuery": false,
+          "query": "SELECT ((max-value)/1024/1024/1024) FROM \"disk_smb\" WHERE \"hostname\" =~ /^cmffs/ AND \"service\" =~ /Services-NoBackup$/ AND $timeFilter",
+          "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "warn"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "alias": "CRITICAL",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "hide": false,
-          "measurement": "disk_smb",
-          "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"disk_smb\" WHERE \"hostname\" =~ /^cmffs/ AND \"service\" = \"disk \\Services-NoBackup\" AND $timeFilter GROUP BY time($interval) fill(null)",
-          "rawQuery": false,
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "crit"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
           "tags": []
         }
       ],
@@ -1110,11 +800,11 @@
       },
       "yaxes": [
         {
-          "format": "decbytes",
+          "format": "gigabytes",
           "label": "",
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": 0,
           "show": true
         },
         {
