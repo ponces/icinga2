@@ -1,2 +1,2 @@
-root:<YOUR_MAILBOX>
-default:<YOUR_MAILBOX>
+root:noreply@icinga.com
+default:noreply@icinga.com

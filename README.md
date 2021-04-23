@@ -24,7 +24,7 @@ This repository contains the source for the [icinga2](https://www.icinga.org/ici
 
 Start a new container and bind to host's port 80
 
-    docker run -p 80:80 -h icinga2 -t jordan/icinga2:latest
+    docker run -p 80:80 -h icinga2 -t ponces/icinga2:latest
 
 ## Icinga Web 2
 
@@ -36,7 +36,7 @@ If you want to save your php-sessions over multiple boots, mount `/var/lib/php/s
 
 example:
 ```
-docker run [...] -v $PWD/icingaweb2-sessions:/var/lib/php/sessions/ jordan/icinga2
+docker run [...] -v $PWD/icingaweb2-sessions:/var/lib/php/sessions/ ponces/icinga2
 ```
 
 ## Icinga Director
